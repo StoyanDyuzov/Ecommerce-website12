@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content = "IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mahajani&family=Open+Sans&family=Poppins:wght@200&family=Roboto:wght@300;400&family=Ubuntu&display=swap" rel="stylesheet">
+    <link href="css/login.css" rel="stylesheet">
+</head>
+<body>
+    <div class="headerlogin">
+        <h1 class="logologin">SHOPIFI</h1>
+    </div>
+    
+    <h1 id="error" class="error"><%=e_l%></h1>
+    <div class="error_div" id="error_div">
+        <h1 class="error_text">Invalid data!</h1>
+        <button class="error_button" id="error_button" onclick="Error_X()">X</button>
+    </div>
+    <div class="wrapperlogin">
+        <div class="containerlogin">
+            <div class="textdiv">
+            <h2 class="logintext">SHOPIFI CLIENT</h2>
+            <h2 class="logintext">LOGIN PORTAL</h2>
+            </div>
+            <form action="/login" method = "post">
+                <div class="Email">
+                    <p class="loginemail">*Email</p>
+                    <input type = "text" id ="e-mail" name = "email"placeholder = "Enter your email..." require autocomplete="off" class="input1"></input>
+                </div>
+                <div class="Password">
+                    <p class="loginpassword">*Password</p>
+                    <input type = "password" id ="password" placeholder = "password..."class="input1" name="password"></input>
+                </div>
+                <button type="submit" class="btnlogin">Log in</button>
+            </form>
+            <p class="donthaveaccount">Don't have an account? <a href="/signup">Signup</a></p>
+        </div>
+    <script>
+        const error_login = document.getElementById("error").innerHTML
+        if(Number(error_login) > 0)
+        {  
+            document.getElementById("error_div").style.display = "flex"
+        }
+        function Error_X(){
+            document.getElementById("error_div").style.display = "none"
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content = "IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopifi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mahajani&family=Open+Sans&family=Poppins:wght@200&family=Roboto:wght@300;400&family=Ubuntu&display=swap" rel="stylesheet">
+    <link href="css/style1.css"  rel="stylesheet"><!--v href ne spomenavame public papkata zashtoto express veche q ima-->
+</head>
+<body>
+    <div class="wrapper">
+        <div class="header">
+            <div class="section1">
+                <h1 class="logo">SHOPIFI</h1>
+            </div>
+            <div class="section2">
+                <ul class="menu">
+                    <li><a href="#" onclick="HomeFunction()">Home</a></li>
+                    <li><a href="#" onclick="OrdersFunction()">Orders</a></li>
+                    <li><a href="#" class="cart1" id="cart1" onclick="CartOpen()">Cart</a></li>
+                    <li><a href="/login">Hello,<%=nameasd%></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="cart-container" id = "cart-container">
+        <div class="cart-section1" id = "cart-section1">
+            <h2 id = "cart-noitems" class="cart-noitems">No items in the cart...</h2>
+        </div>
+        <div class="cart-section2">
+            <h2 class="cart-total" id="cart-total">Total:-</h2>
+            <button class="class-checkout" onclick="Checkout()">Check out</button>
+        </div>
+
+    </div>
+    
+    <div class="wrapper2" id="wrapper2">
+        <div class="section12">
+            <h1 class="tmb">Macbook 14 Pro</h1>
+            <p class="textmb" id = "a">Supercharged by M2 Pro or M2 Max, MacBook Pro takes its power and efficiency furthrt than ever. It delivers exceptional performance whether its plugged in or not, and now has even longer battery life.</p>
+            <button href= "#" class="read-more">Read more</button>
+            <button href = "#" class="add-to-cart"><img src="/css/images/shopping cart.png" class="sc"> Add to cart</button>
+        </div>
+        <div class="section22">
+            <img src="/css/images/mackbook.png" alt="" class="mb">
+        </div>
+    </div>
+
+    <div class="wrapper3" id="wrapper3">
+
+        <div class="mobiles-container" id="mobiles-container">
+
+            <div class="mobiles-text">
+                <h1 class="mobiles1">Mobiles</h1>
+            </div>
+            
+           <div class="mobiles" id = "mobiles">
+
+           </div>
+        </div>
+    </div>
+    <form method="post" action="/update_orders">
+        <input name="orders_history" class="orders_history" id="orders_history" type="text">
+        <button id="orders_history_button" class="orders_history_button"></button>
+
+    </form>
+    
+    <div class="orders-wrapper" id = "orders-wrapper">
+        <h1 class="orders-text" id = "orders-text"><%=object2%></h1>
+    </div>
+
+    <div class="black">
+
+    </div>
+
+    <script>
+        const products_list = [{
+
+            id:1,
+            model:"Iphone 12 Pro",
+            price:"$1032.80",
+            price1:"1032.80",
+            image:"/css/images/iphone12/112.png"
+        },{
+            id:2,
+            model:"Iphone 13 Pro",
+            price:"$1258.40",
+            price1:"1258.40",
+            image:"/css/images/iphone12/112.png"
+        },
+
+        {
+            id:3,
+            model:"Iphone 14 Pro",
+            price:"$1350.30",
+            price1:"1350.30",
+            image:"/css/images/iphone14/2.png"
+        }, 
+        {
+            id:4,
+            model:"Iphone 15 Pro",
+            price:"$1536.20",
+            price1:"1536.20",
+            image:"/css/images/iphone14/2.png"
+        }
+        ];
+
+
+        const counter = 0;
+        const cart1 = document.getElementById("cart1");
+        const cartItems = [];
+
+        function AddToCart(phone_id,counter,cart1)
+        {
+            cartcounter = 0;
+            for(i=0;i<cartItems.length;i++)
+            {
+                if(phone_id == cartItems[i])
+                {
+                    cartcounter -= 1000;
+                }
+                else{
+                    cartcounter += 1;
+                }
+            }
+            if(cartcounter < 0)
+            {
+                cartcounter = 0;
+            }
+            else{
+                cartcounter = 0;
+                cartItems.push(phone_id)
+            }
+        }
+        console.log(cartItems)
+
+        const mobiles_div = document.getElementById("mobiles");
+
+        function CreateMobiles(products_list){
+            
+            for(i = 0; i < products_list.length; i++)
+            {
+                let newDiv = document.createElement("div");
+                newDiv.classList.add("item");
+                newDiv.innerHTML = `
+                <img src = "${products_list[i].image}" class = "mobile_img">
+                <h1 class = "model">${products_list[i].model}</h1>
+                <h2 class = "price">$${products_list[i].price1}</h2> 
+                <button onclick = "AddToCart(${products_list[i].id})"  class="mobile_button">Add to Cart</button>
+                `;
+                mobiles_div.appendChild(newDiv);
+            } 
+        }
+        
+        CreateMobiles(products_list)
+
+
+        var CartTotal = 0;
+        var alreadydone = [];
+        function CartOpen()
+        {
+            var container = document.getElementById("cart-container");
+            var cartSection1 = document.getElementById("cart-section1");
+            var noitems = document.getElementById("cart-noitems");
+            var carttotal1 = document.getElementById("cart-total");
+
+
+            if (container.style.display === "none") 
+            {
+                container.style.display = "flex";
+                if(cartItems.length > 0)
+                {
+                    noitems.style.display = "none";
+                    
+                    for(i = 0; i < cartItems.length; i++)
+                    {
+                        if(alreadydone.includes(cartItems[i]) === false)
+                        {
+                            console.log(alreadydone)
+                            for(j=0;j<products_list.length;j++)
+                            {
+                                if(cartItems[i] === products_list[j].id)
+                                {
+                                    var CartDiv = document.createElement("div");
+                                    CartDiv.classList.add("cartI");
+                                    const try_a = "cart_"+ products_list[j].id.toString();
+                                    CartDiv.setAttribute("id",try_a);
+                                    CartDiv.innerHTML = `
+                                    <img src = "${products_list[j].image}" class = "mobile_img_cart">
+                                    <h1 class = "model_cart">${products_list[j].model}</h1>
+                                    <h2 class = "price_cart">$${products_list[j].price1}</h2>
+                                    <button class = "remove-product" onclick = "RemoveItem(${products_list[j].id})">X</button> 
+
+                                    `
+                                    
+                                    CartTotal += parseFloat(products_list[j].price1);
+                                    carttotal1.innerHTML = "Total: "+ CartTotal.toFixed(2).toString(); 
+                                    alreadydone.push(cartItems[i])
+                                    cartSection1.appendChild(CartDiv);
+                                    console.log("asd" + cartItems)
+                                }
+                            
+                            }
+                        }
+                    }
+                }
+                else{
+                    noitems.innerHTML = "No items in the cart..."
+                    noitems.style.display = "block";
+                }
+            } else {
+            container.style.display = "none";
+            }
+
+        } 
+
+        function RemoveItem(product_id){
+            
+
+            var  index_product = alreadydone.indexOf(product_id)
+            var removed_product_list = alreadydone.splice(index_product, 1)
+
+            var index_product2 = cartItems.indexOf(product_id)
+            var removed_product_2 = cartItems.splice(index_product2, 1)
+
+            const remove_name = "cart_" + product_id.toString()
+            const removed_product = document.getElementById(remove_name);
+            removed_product.remove()
+            
+
+            const total_change = document.getElementById("cart-total")
+            CartTotal -= parseFloat(products_list[product_id-1].price1).toFixed(2)
+            total_change.innerHTML = "Total: " + CartTotal.toFixed(2).toString()
+
+            console.log(alreadydone)
+            if(alreadydone.length === 0)
+            {
+                document.getElementById("cart-noitems").style.display = "flex"
+            }
+            
+        }
+        
+        orders = []
+        counter_orders = 0
+        function Checkout()
+        {
+            if(cartItems.length > 0)
+            {
+                console.log(cartItems +"orders")
+                console.log(CartTotal)
+                orders.push({CartTotal:cartItems})
+                console.log(orders[0].CartTotal + "incide orders")
+
+                document.getElementById("orders_history").value = cartItems
+                document.getElementById("orders_history_button").click()
+                
+                for(i = 0 ; i < cartItems.length;i++)
+                {
+                    const remove_name = "cart_" + cartItems[i].toString()
+                    const removed_product = document.getElementById(remove_name);
+                    removed_product.remove()
+                }
+
+                cartItems.splice(0,cartItems.length)
+                alreadydone.splice(0,alreadydone.length)
+
+                CartTotal = 0
+                document.getElementById("cart-total").innerHTML = "Total: " + "0"
+
+                var noitems = document.getElementById("cart-noitems");
+                noitems.innerHTML = "Order is done successfully"
+                noitems.style.display = "block";
+
+                
+                
+
+            }
+            counter_orders += 1
+
+        }
+
+        function OrdersFunction(){
+            document.getElementById("wrapper2").style.display = "none"
+            document.getElementById("mobiles-container").style.display = "none"
+            document.getElementById("orders-wrapper").style.display = "flex"
+            document.getElementById("orders-text").style.display = "none"
+            const orders_list = document.getElementById("orders-text").innerHTML
+            const orders_wrapper = document.getElementById("orders-wrapper")
+            console.log(orders_list)
+
+            let current_id =[];
+            let current_date = "";
+            let current_time = "";
+
+            let signal = 0;
+            let signal_date = 0;
+            let signal_hours = 0;
+
+            var total_order = 0;
+
+            var div_counter = 1;
+
+            if(orders_list.length > 10)
+            {
+                for(i=0;i<orders_list.length;i++)
+                {
+
+                    if(orders_list[i] != "," && signal === 0  && orders_list[i] != "#")
+                    {
+                        current_id.push(Number(orders_list[i]))
+                        console.log(current_id)
+                    }
+                    if(orders_list[i] == "#")
+                    {
+                        signal = 1
+                        console.log("#")
+                    }
+                    if(orders_list[i] != "," && signal === 1 && orders_list[i] != "T" && signal_date === 0 && orders_list[i] != "#")
+                    {
+                        current_date += orders_list[i]
+                    }
+                    if(orders_list[i] == "T")
+                    {
+                        signal_date += 1 
+                        console.log(current_date)
+                    }
+                    if(orders_list[i] != "," && signal === 1 && orders_list[i] != "T" && orders_list[i] != "Z" && signal_date === 1 && orders_list[i] != "#" && signal_hours === 0){
+                        current_time += orders_list[i]
+                    }
+                    if(orders_list[i] == "Z")
+                    {
+                        for(a=0;a<current_id.length;a++)
+                        {
+                            for(q=0;q<products_list.length;q++)
+                            {
+                                if(current_id[a] === products_list[q].id)
+                                {
+                                    total_order += parseFloat(products_list[q].price1);
+                                }
+                            }
+                        }
+                        var WrapperOrdersDiv = document.createElement("div")
+                        WrapperOrdersDiv.classList.add("orders_wrapper_inside")
+                        const id_order_wrapper = "orders_wrapper_inside"
+                        console.log("orders_wrapper_inside" + div_counter.toString())
+                        WrapperOrdersDiv.setAttribute("id",id_order_wrapper)
+                        orders_wrapper.appendChild(WrapperOrdersDiv);
+                        WrapperOrdersDiv.innerHTML = `
+                        <h1 class = "order_number">Order: ${div_counter}</h1>
+                        <div class = "inside_wrapper_order">
+                            <div class = "date_of_order_div">
+                                <h1 class = "date_of_order_text1">Date of orders</h1>
+                                <p class = "date_of_orders_text2">${current_time}</p>
+                            </div>
+                            <div class = "total_div">
+                                <h1 class = "total_text1">Total</h1>
+                                <p class = "total_text2">$${total_order.toFixed(2)}</p>
+                            </div>
+                            <div class = "payment_status_div">
+                                <h1 class = "payment_status_text1">Payment status</h1>
+                                <p class = "payment_status_text2">Paid</p>
+                            </div>
+                            <div class = "delivery_date_div">
+                                <h1 class = "delivery_date_text1">Delivery date</h1>
+                                <p class = "delivert_date_text2">${current_time}</p>
+                            </div>
+                        </div>
+                        `
+                        for(j=0;j<current_id.length;j++)
+                        {
+
+                            for(g=0;g<products_list.length;g++)
+                            {
+                                if(current_id[j] === products_list[g].id)
+                                {
+                                    var OrdersDiv = document.createElement("div");
+                                    OrdersDiv.classList.add("single_order");
+                                    const id_order_div = "order_"+ products_list[g].id.toString();
+                                    OrdersDiv.setAttribute("id",id_order_div);
+                                    OrdersDiv.innerHTML = `
+                                    <img src = "${products_list[g].image}" class = "mobile_img_order">
+                                    <h1 class = "model_order">${products_list[g].model}</h1>
+                                    <p class = "price_order">$${products_list[g].price1}</p>
+                                    `
+                                    
+                                    WrapperOrdersDiv.appendChild(OrdersDiv);
+                                }
+                            }
+                        }
+                        div_counter += 1
+                        total_order = 0;
+
+                        console.log(current_time)
+                        signal = 0
+                        signal_hours = 0
+                        signal_date = 0
+                        current_date = ""
+                        current_id = []
+                        current_time = ""
+                    }
+
+                }
+            }
+
+        }
+
+        function HomeFunction(){
+            document.getElementById("wrapper2").style.display = "flex"
+            document.getElementById("mobiles-container").style.display = "flex"
+            document.getElementById("orders-wrapper").style.display = "none"
+            document.getElementById("oreders-text").style.display = "none"
+
+        }
+        console.log()
+    </script>
+</body>
+</html>
