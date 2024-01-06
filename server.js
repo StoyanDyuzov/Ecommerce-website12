@@ -18,6 +18,12 @@ app.locals.error_login = 0
 app.locals.error_signup = 0
 
 app.get("/",async (req,res)=>{
+    app.locals.nameasd = "no name"
+    app.locals.ordersList = "no orders"
+    app.locals.email_check = "no email"
+    res.render(__dirname + "/view/index.ejs",{object1:app.locals.nameasd, object2:app.locals.ordersList})
+})
+app.get("/logedin",async (req,res)=>{
     if(app.locals.email_check != "no email")
     {
         const checking = await collection_signup.findOne({email:app.locals.email_check})
@@ -58,7 +64,7 @@ app.post("/update_orders", async(req,res) =>{
 
     app.locals.ordersList = dborders.orders.toString()
     console.log(app.locals.ordersList)
-    res.redirect("/")
+    res.redirect("/logedin")
     console.log(dborders.orders.toString())
 
 })
@@ -126,7 +132,7 @@ app.post("/login",async (req,res)=>{
                 email_of_user = req.body.email
                 app.locals.nameasd = check.name
                 app.locals.error_login = 0
-                res.redirect("/")
+                res.redirect("/logedin")
             }else{
                 app.locals.error_login += 1
                 res.redirect("/login")
